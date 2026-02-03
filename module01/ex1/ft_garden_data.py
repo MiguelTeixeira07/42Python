@@ -4,6 +4,7 @@ class Plant:
     height: int
     age: int
 
+
 if __name__ == "__main__":
     plant_1 = Plant()
     plant_2 = Plant()

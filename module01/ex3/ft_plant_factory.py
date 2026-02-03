@@ -5,8 +5,7 @@ class Plant:
         self.name = name
         self.height = height
         self.age = age
-        self.growth: int = 0
-        print(f"Created: {self.name} ({self.height}cm, {self.age})\n")
+        print(f"Created: {self.name} ({self.height}cm, {self.age})")
 
     def get_info(self):
         """This method outputs all the information about your plants"""
@@ -14,14 +13,13 @@ class Plant:
 
 
 if __name__ == "__main__":
-    plants = [0, 0, 0, 0, 0]
+    plants = []
+    names = ("Rose", "Tulip", "Sunflower", "Cactus", "Oak tree")
+    heights = (30, 25, 80, 120, 435)
+    ages = (25, 20, 50, 365, 10500)
 
     for i in range(5):
-        print(f"=== Enter Plant {i + 1} Info ===")
-        name = input("Name: ")
-        height = int(input("Height: "))
-        age = int(input("Age: "))
-        plants[i] = Plant(name, height, age)
+        plants.append(Plant(names[i], heights[i], ages[i]))
 
     print("\n=== Your Plants ===")
     for i in range(5):
