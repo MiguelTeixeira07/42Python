@@ -75,6 +75,8 @@ class LogProcessor(DataProcessor):
                 'DEBUG']
 
     def process(self, data: Any) -> str:
+        output = ''
+
         for word in self.keywords:
             if word in data:
                 match word:
