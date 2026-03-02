@@ -66,7 +66,7 @@ class SensorStream(DataStream):
         avg_temp = sum_temp / total_temp
 
         output += f'Sensor analysis: {len(filtered)} readings processed'
-        output += f', avg temp: {avg_temp}°C'
+        output += f', avg temp: {avg_temp:.1f}°C'
 
         return output
 
@@ -153,7 +153,7 @@ class EventStream(DataStream):
         filtered = []
 
         for item in bat:
-            if isinstance(item, str):
+            if isinstance(item, str) and (not crit or item == crit):
                 filtered.append(item)
 
         return filtered
@@ -201,7 +201,6 @@ def main() -> None:
         {"type": "buy", "amount": 100},
         {"type": "sell", "amount": 150},
         {"type": "buy", "amount": 75},
-        {"type": "buy", "amount": 50}
     ]
 
     event_batch = [
