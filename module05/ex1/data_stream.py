@@ -54,8 +54,8 @@ class SensorStream(DataStream):
         sum_temp = 0
         total_temp = 0
 
-        output += f'Stream ID: {self.stream_id}, Type: Environmental Data\n'
         output += 'Initializing Sensor Stream...\n'
+        output += f'Stream ID: {self.stream_id}, Type: Environmental Data\n'
         output += f'Processing sensor batch: {print_dicts(bat)}\n'
 
         for item in bat:
@@ -96,8 +96,8 @@ class TransactionStream(DataStream):
         buy_total = 0
         sell_total = 0
 
-        output += f'Stream ID: {self.stream_id}, Type: Financial Data\n'
         output += 'Initializing Transaction Stream...\n'
+        output += f'Stream ID: {self.stream_id}, Type: Financial Data\n'
         output += f'Processing transaction batch: {print_dicts(bat)}\n'
 
         for item in bat:
@@ -136,8 +136,8 @@ class EventStream(DataStream):
         filtered = self.filter_data(bat, '')
         err_count = 0
 
-        output += f'Stream ID: {self.stream_id}, Type: System Events\n'
         output += 'Initializing Event Stream...\n'
+        output += f'Stream ID: {self.stream_id}, Type: System Events\n'
         output += f'Processing event batch: {bat}\n'
 
         for item in bat:
@@ -179,15 +179,17 @@ class StreamProcessor:
 
 
 def main() -> None:
-    sensor_stream = SensorStream("SENSOR_001")
-    transaction_stream = TransactionStream("TRANS_001")
-    event_stream = EventStream("EVENT_001")
+    print('=== CODE NEXUS - POLIMORPHIC STREAM SYSTEM ===\n')
+
+    sensor = SensorStream("SENSOR_001")
+    trans = TransactionStream("TRANS_001")
+    event = EventStream("EVENT_001")
 
     processor = StreamProcessor()
 
-    processor.add_stream(sensor_stream)
-    processor.add_stream(transaction_stream)
-    processor.add_stream(event_stream)
+    processor.add_stream(sensor)
+    processor.add_stream(trans)
+    processor.add_stream(event)
 
     sensor_batch = [
         {"temp": 22.5},
@@ -195,10 +197,11 @@ def main() -> None:
         {"pressure": 1013}
     ]
 
-    transaction_batch = [
+    trans_batch = [
         {"type": "buy", "amount": 100},
         {"type": "sell", "amount": 150},
-        {"type": "buy", "amount": 75}
+        {"type": "buy", "amount": 75},
+        {"type": "buy", "amount": 50}
     ]
 
     event_batch = [
@@ -207,13 +210,46 @@ def main() -> None:
         "logout"
     ]
 
-    batches = [sensor_batch, transaction_batch, event_batch]
+
+    streams = [sensor, trans, event]
+    batches = [sensor_batch, trans_batch, event_batch]
 
     results = processor.process_all(batches)
 
     for result in results:
         print(result)
         print()
+
+    print("=== Polymorphic Stream Processing ===")
+    print("Processing mixed stream types through unified interface...")
+    print()
+    print("Batch 1 Results:")
+
+    for s, b in zip(streams, batches):
+        filtered = s.filter_data(b)
+
+        if isinstance(s, SensorStream):
+            print(f"- Sensor data: {len(filtered)} readings processed")
+        elif isinstance(s, TransactionStream):
+            print(f"- Transaction data: {len(filtered)} operations processed")
+        elif isinstance(s, EventStream):
+            print(f"- Event data: {len(filtered)} events processed")
+    print()
+    print("Stream filtering active: High-priority data only")
+
+    critical_sensor = sensor.filter_data(sensor_batch, "temp")
+    large_trans = [
+        t for t in trans_batch
+        if t["type"] == "buy" and t["amount"] > 100
+    ]
+
+    print(
+        f"Filtered results: "
+        f"{len(critical_sensor)} critical sensor alerts, "
+        f"{len(large_trans)} large transaction"
+    )
+    print()
+    print("All streams processed successfully. Nexus throughput optimal.")
 
 
 if __name__ == '__main__':
