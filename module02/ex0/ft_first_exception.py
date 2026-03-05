@@ -10,3 +10,29 @@ def check_temperature(temp_str: str) -> int:
         return temp_int
     except ValueError:
         print(f"Error: '{temp_str}' is not a valid number")
+
+
+def main() -> None:
+    print('=== Garden Temperature Checker ===\n')
+
+    temp = 25
+    print(f'Testing temperature: {temp}')
+    check_temperature(temp)
+
+    temp = 'abc'
+    print(f'Testing temperature: {temp}')
+    check_temperature(temp)
+
+    temp = 100
+    print(f'Testing temperature: {temp}')
+    check_temperature(temp)
+
+    temp = -50
+    print(f'Testing temperature: {temp}')
+    check_temperature(temp)
+
+    print("\nAll tests completed - program didn't crash!")
+
+
+if __name__ == '__main__':
+    main()
