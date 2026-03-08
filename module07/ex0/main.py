@@ -9,26 +9,29 @@ def main():
     dragon = CreatureCard('Fire Dragon', 5, 'Legendary', 7, 5)
     goblin_warrior = CreatureCard('Goblin Warrior', 3, 'Uncommon', 2, 1)
 
+    game_state = {
+        "player_mana": 8,
+        "battlefield": [goblin_warrior],
+        "graveyard": [],
+        "player_health": 20,
+        "enemy_health": 20
+    }
+
     dragon_info = dragon.get_card_info()
 
     print('CreatureCard info:')
     print(dragon_info)
 
-    print(f'\nPlaying {dragon_info['name']} with 6 mana available:')
-    result = dragon.play({"player_mana": 6,
-                          "battlefield": [],
-                          "graveyard": [],
-                          "player_health": 20,
-                          "enemy_health": 20})
-    print(result)
+    game_state = dragon.play(game_state)
 
-    print('\nFire Dragon attacks Goblin Warrior:')
-    attack = dragon.attack_target(goblin_warrior)
-    print(f'Attack result: {attack}')
+    game_state = dragon.attack_target(goblin_warrior, game_state)
 
     playable = dragon.is_playable(3)
-    print('\nTesting insufficient mana (3 available): ', end='')
-    print(f'Playable: {"True" if playable else "False"}')
+    print('\nTesting insufficient mana ', end='')
+    print(f'({game_state["player_mana"]} available):')
+    dragon.play(game_state)
+
+    print('\nAbstract pattern successfully demonstrated!')
 
 
 if __name__ == "__main__":

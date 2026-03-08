@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Any
 from ex0.Card import Card
 
 
@@ -16,22 +16,45 @@ class CreatureCard(Card):
 
     def play(self, game_state: dict) -> dict:
         playable = self.is_playable(game_state['player_mana'])
-        print(f'Playable: {"True" if playable else "False"}')
 
-        struct = {
-            'card_played': self.name,
-            'mana_used': self.cost,
-            'effect': 'Creature summoned to battlefield'
-        }
+        print(f'\nPlaying {self.name} with ', end='')
+        print(f'mana available: {game_state['player_mana']}')
+        print(f'Playable: {playable}')
 
-        return struct
+        if playable:
+            play_result = {
+                'card_played': self.name,
+                'mana_used': self.cost,
+                'effect': 'Creature summoned to battlefield'
+            }
+            game_state['player_mana'] -= self.cost
+            game_state['battlefield'].append(self)
+            print(f'Play result: {play_result}')
 
-    def attack_target(self, target: CreatureCard) -> Dict:
-        struct = {
+        return game_state
+
+    def attack_target(self, target: CreatureCard, game_state: dict) -> Dict:
+        print('\nFire Dragon attacks Goblin Warrior:')
+
+        attack_result: dict[str, Any] = {
             'attacker': self.name,
-            'target': target.__class__.__name__,
-            'damage_dealt': self.attack,
-            'combat_resolved': True if target.health <= self.attack else False
+            'target': target.name
         }
 
-        return struct
+        if target in game_state['battlefield']:
+            attack_result.update({'damage_dealt': self.attack})
+
+            if target.health <= self.attack:
+                attack_result.update({'combat_resolved': True})
+                game_state['graveyard'].append(target)
+                game_state['battlefield'].remove(target)
+                target.health = 0
+            else:
+                attack_result.update({'combat_resolved': False})
+                target.health -= self.attack
+
+        game_state['enemy_health'] = target.health
+
+        print(f'Attack result: {attack_result}')
+
+        return game_state
