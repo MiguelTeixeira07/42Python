@@ -22,25 +22,31 @@ def test_water() -> None:
 
 
 if __name__ == "__main__":
-    print("=== Custom Garden Errors Demo ===")
-    print()
+    print("=== Custom Garden Errors Demo ===\n")
+
     print("Testing PlantError...")
+
     try:
         test_plant()
     except PlantError as e:
         print(f"Caught PlantError: {e}")
     print()
+
     print("Testing WaterError...")
+
     try:
         test_water()
     except WaterError as e:
         print(f"Caught WaterError: {e}")
     print()
+
     print("Testing catching all garden errors...")
+
     for func in (test_plant, test_water):
         try:
             func()
         except GardenError as e:
             print(f"Caught a garden error: {e}")
-        print()
+    print()
+
     print("All custom error types work correctly!")

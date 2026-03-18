@@ -1,6 +1,5 @@
-def main():
+def main() -> None:
     print("=== Game Analytics Dashboard ===")
-
 
     players = ["alice", "bob", "charlie", "diana"]
     scores = {
@@ -10,10 +9,31 @@ def main():
         "diana": 2050
     }
     achievements = {
-        "alice": ["first_kill", "level_10", "boss_slayer", "treasure_hunter", "speed_demon"],
-        "bob": ["first_kill", "level_10", "collector"],
-        "charlie": ["first_kill", "level_10", "boss_slayer", "perfectionist", "speed_demon", "collector", "explorer"],
-        "diana": ["first_kill", "level_10"]
+        "alice": [
+            "first_kill",
+            "level_10",
+            "boss_slayer",
+            "treasure_hunter",
+            "speed_demon"
+        ],
+        "bob": [
+            "first_kill",
+            "level_10",
+            "collector"
+        ],
+        "charlie": [
+            "first_kill",
+            "level_10",
+            "boss_slayer",
+            "perfectionist",
+            "speed_demon",
+            "collector",
+            "explorer"
+        ],
+        "diana": [
+            "first_kill",
+            "level_10"
+        ]
     }
     regions = {
         "alice": "north",
@@ -22,7 +42,7 @@ def main():
         "diana": "north"
     }
 
-    print("=== List Comprehension Examples ===")
+    print("\n=== List Comprehension Examples ===")
 
     high_scorers = [p for p, s in scores.items() if s > 2000]
     print(f"High scorers (>2000): {high_scorers}")
@@ -33,7 +53,7 @@ def main():
     active_players = [p for p in players if p in scores]
     print(f"Active players: {active_players}")
 
-    print("=== Dict Comprehension Examples ===")
+    print("\n=== Dict Comprehension Examples ===")
 
     player_scores = {p: s for p, s in scores.items()}
     print(f"Player scores: {player_scores}")
@@ -48,7 +68,7 @@ def main():
     achievement_counts = {p: len(a) for p, a in achievements.items()}
     print(f"Achievement counts: {achievement_counts}")
 
-    print("=== Set Comprehension Examples ===")
+    print("\n=== Set Comprehension Examples ===")
 
     unique_players = {p for p in players}
     print(f"Unique players: {unique_players}")
@@ -63,7 +83,7 @@ def main():
     active_regions = {r for r in regions.values()}
     print(f"Active regions: {active_regions}")
 
-    print("=== Combined Analysis ===")
+    print("\n=== Combined Analysis ===")
 
     total_players = len(players)
     total_unique_achievements = len(unique_achievements)

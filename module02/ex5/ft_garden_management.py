@@ -56,7 +56,7 @@ def test_garden_management():
     print("=== Garden Management System ===")
     garden = GardenManager()
 
-    print("Adding plants to garden...")
+    print("\nAdding plants to garden...")
     try:
         garden.add_plant("tomato", 5, 8)
         print("Added tomato successfully")
@@ -67,20 +67,20 @@ def test_garden_management():
     except PlantError as e:
         print("Error adding plant:", e)
 
-    print("Watering plants...")
+    print("\nWatering plants...")
     try:
         garden.water_plants()
     except GardenError as e:
         print("Caught GardenError:", e)
 
-    print("Checking plant health...")
+    print("\nChecking plant health...")
     try:
         print(garden.check_health("tomato"))
         print(garden.check_health("lettuce"))
     except (PlantError, ValueError) as e:
         print("Error checking lettuce:", e)
 
-    print("Testing error recovery...")
+    print("\nTesting error recovery...")
     try:
         empty = GardenManager()
         empty.water_plants()
@@ -88,4 +88,8 @@ def test_garden_management():
         print("Caught GardenError:", e)
         print("System recovered and continuing...")
 
-    print("Garden management system test complete!")
+    print("\nGarden management system test complete!")
+
+
+if __name__ == '__main__':
+    test_garden_management()

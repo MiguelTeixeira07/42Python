@@ -6,8 +6,20 @@ def garden_operations(error: int) -> None:
             test = 5 / 0
             print(test)
         case 2:
-            open("test.txt")
+            file = open("test.txt")
+            file.close()
         case 3:
+            dict = {"num": 5, "str": "abc", "bool": True}
+            print(dict["float"])
+        case _:
+            int('abc')
+
+            test = 5 / 0
+            print(test)
+
+            file = open("test.txt")
+            file.close()
+
             dict = {"num": 5, "str": "abc", "bool": True}
             print(dict["float"])
 
@@ -20,6 +32,7 @@ def test_error_types():
         print(f"Caught ValueError: {e}")
     finally:
         print()
+
     try:
         print("Testing ZeroDivisionError...")
         garden_operations(1)
@@ -27,6 +40,7 @@ def test_error_types():
         print(f"Caught ZeroDivisionError: {e}")
     finally:
         print()
+
     try:
         print("Testing FileNotFoundError...")
         garden_operations(2)
@@ -34,6 +48,7 @@ def test_error_types():
         print(f"Caught FileNorFoundError: {e}")
     finally:
         print()
+
     try:
         print("Testing KeyError...")
         garden_operations(3)
@@ -41,3 +56,17 @@ def test_error_types():
         print(f"Caught KeyError: {e}")
     finally:
         print()
+
+    try:
+        print("Testing multiple errors together")
+        garden_operations(4)
+    except Exception:
+        print("Caught an error, but the program continues!")
+    finally:
+        print()
+
+    print("All error types tested successfully!")
+
+
+if __name__ == '__main__':
+    test_error_types()

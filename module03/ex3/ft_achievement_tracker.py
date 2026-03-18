@@ -3,44 +3,47 @@ class Player:
         self.name = name
         self.achievements = set(achievements)
 
-    def common_with(self, other: Player) -> set:
+    def common_with(self, other: "Player") -> set:
         return self.achievements.intersection(other.achievements)
 
-    def unique_vs(self, other: Player) -> set:
+    def unique_vs(self, other: "Player") -> set:
         return self.achievements.difference(other.achievements)
 
 
 def main() -> None:
-    print("=== Achievement Tracker System ===")
+    print("=== Achievement Tracker System ===\n")
 
-    alice = Player("alice", [
+    alice_stats = [
         "first_kill",
         "level_10",
         "treasure_hunter",
         "speed_demon"
-    ])
+    ]
+    alice = Player("alice", alice_stats)
 
-    bob = Player("bob", [
+    bob_stats = [
         "first_kill",
         "level_10",
         "boss_slayer",
         "collector"
-    ])
+    ]
+    bob = Player("bob", bob_stats)
 
-    charlie = Player("charlie", [
+    charlie_stats = [
         "level_10",
         "treasure_hunter",
         "boss_slayer",
         "speed_demon",
         "perfectionist"
-    ])
+    ]
+    charlie = Player("charlie", charlie_stats)
 
     players = [alice, bob, charlie]
 
     for p in players:
         print(f"Player {p.name} achievements: {p.achievements}")
 
-    print("=== Achievement Analytics ===")
+    print("\n=== Achievement Analytics ===")
 
     all_achievements = (
         alice.achievements
@@ -49,6 +52,7 @@ def main() -> None:
     )
 
     print(f"All unique achievements: {all_achievements}")
+    print()
     print(f"Total unique achievements: {len(all_achievements)}")
 
     common_all = (
@@ -67,7 +71,7 @@ def main() -> None:
 
     rare = all_achievements.difference(shared_pairs)
     print(f"Rare achievements (1 player): {rare}")
-
+    print()
     print(f"Alice vs Bob common: {alice.common_with(bob)}")
     print(f"Alice unique: {alice.unique_vs(bob)}")
     print(f"Bob unique: {bob.unique_vs(alice)}")

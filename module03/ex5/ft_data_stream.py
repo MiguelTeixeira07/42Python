@@ -42,10 +42,10 @@ def prime_stream(n: int) -> gen[int, None, None]:
 
 
 def main():
-    print("=== Game Data Stream Processor ===")
+    print("=== Game Data Stream Processor ===\n")
 
-    total_events = 1000
-    print(f"Processing {total_events} game events...")
+    total_events = 3
+    print(f"Processing {total_events} game events...\n")
 
     event_stream = game_event_stream(total_events)
 
@@ -72,16 +72,16 @@ def main():
         if "leveled up" in event:
             level_up_events += 1
 
-    print("...")
-    print("=== Stream Analytics ===")
+    print("\n=== Stream Analytics ===")
     print(f"Total events processed: {processed}")
     print(f"High-level players (10+): {high_level}")
     print(f"Treasure events: {treasure_events}")
     print(f"Level-up events: {level_up_events}")
+    print()
     print("Memory usage: Constant (streaming)")
     print("Processing time: Not stored (stream-based)")
 
-    print("=== Generator Demonstration ===")
+    print("\n=== Generator Demonstration ===")
 
     fib = fibonacci_stream(10)
     fib_values = []
