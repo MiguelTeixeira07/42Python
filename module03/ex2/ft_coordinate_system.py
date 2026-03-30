@@ -1,45 +1,62 @@
-import sys
 import math
 
 
-def parse_coordinates(coord_str) -> tuple:
+def parse_coordinates(coord_str: str) -> tuple:
     try:
-        x, y, z = coord_str.split(",")
-        coords = (int(x), int(y), int(z))
-        print(f'Parsed position: {coords}')
-        return coords
-    except Exception as e:
-        print(f'Error parsing coordinates: {e}')
-        return None
+        str_points = coord_str.split(',')
+        if len(str_points) != 3:
+            raise SyntaxError('Invalid syntax')
+
+        for item in str_points:
+            try:
+                float(item)
+            except ValueError as e:
+                raise ValueError(f"Error on parameter '{item}': {e}")
+
+        return *[float(point) for point in str_points],
+    except ValueError as e:
+        print(e)
+        return ()
+    except SyntaxError as e:
+        print(e)
+        return ()
 
 
-def distance_3d(p1, p2) -> float:
+def distance_3d(p1: tuple, p2: tuple) -> float:
     x1, y1, z1 = p1
     x2, y2, z2 = p2
-    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
+
+    distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
+
+    return round(distance, 4)
 
 
-def unpack(x: int, y: int, z: int) -> str:
+def write_coords(x: float, y: float, z: float) -> str:
     return f'x={x}, y={y}, z={z}'
 
 
 def main() -> None:
-    if len(sys.argv) != 3:
-        print('Usage: python3 ft_coordinate_system.py x1,y1,z1 x2,y2,z2')
-        return
+    print('=== Game Coordinate System ===')
 
-    p1 = parse_coordinates(sys.argv[1])
-    if p1 is None:
-        return
-    p2 = parse_coordinates(sys.argv[2])
-    if p2 is None:
-        return
+    print('\nGet a first set of coordinates')
+    while 1 == 1:
+        temp = input("Enter new coordinates as floats in format 'x,y,z': ")
+        point1 = parse_coordinates(temp)
+        if len(point1) == 3:
+            break
+    print('Got a first tuple', point1)
+    print('It includes:', write_coords(*point1))
+    print('Distance to center:', distance_3d(point1, (0, 0, 0)))
 
-    dist = distance_3d(p1, p2)
-    print(f'Distance between {p1} and {p2}: {dist:.2f}')
+    print('\nGet a second set of coordinates')
+    while 1 == 1:
+        temp = input("Enter new coordinates as floats in format 'x,y,z': ")
+        point2 = parse_coordinates(temp)
+        if len(point2) == 3:
+            break
 
-    print(f'\nPlayer at {unpack(*p1)}')
-    print(f'Coordinates: {unpack(*p2)}')
+    print('Distance between the 2 sets of coordinates: ', end='')
+    print(distance_3d(point1, point2))
 
 
 if __name__ == '__main__':

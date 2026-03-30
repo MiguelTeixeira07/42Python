@@ -1,81 +1,71 @@
-class Player:
-    def __init__(self, name: str, achievements: list) -> None:
-        self.name = name
-        self.achievements = set(achievements)
+import random
 
-    def common_with(self, other: "Player") -> set:
-        return self.achievements.intersection(other.achievements)
 
-    def unique_vs(self, other: "Player") -> set:
-        return self.achievements.difference(other.achievements)
+def gen_player_achievements() -> set:
+    achievements = {
+        'First Steps',
+        'Speed Runner',
+        'Survivor',
+        'Treasure Hunter',
+        'Master Explorer',
+        'Collector Supreme',
+        'Sharp Mind',
+        'Strategist',
+        'Boss Slayer',
+        'World Savior',
+        'Untouchable',
+        'Unstoppable',
+        'Hidden Path Finder',
+    }
+
+    achievements_list = []
+    for achievement in achievements:
+        achievements_list.append(achievement)
+
+    amount = random.randint(5, len(achievements_list))
+    player_achievements = set()
+
+    while len(player_achievements) < amount:
+        player_achievements.add(
+            achievements_list[random.randint(0, len(achievements_list) - 1)]
+        )
+    return player_achievements
 
 
 def main() -> None:
-    print("=== Achievement Tracker System ===\n")
+    print('=== Achievement Tracker System ===\n')
 
-    alice_stats = [
-        "first_kill",
-        "level_10",
-        "treasure_hunter",
-        "speed_demon"
-    ]
-    alice = Player("alice", alice_stats)
+    player_names = ['Alice', 'Bob', 'Charlie', 'Dylan']
+    player_sets = {}
 
-    bob_stats = [
-        "first_kill",
-        "level_10",
-        "boss_slayer",
-        "collector"
-    ]
-    bob = Player("bob", bob_stats)
+    for name in player_names:
+        player_sets[name] = gen_player_achievements()
+        print(f'Player {name}: {player_sets[name]}\n')
 
-    charlie_stats = [
-        "level_10",
-        "treasure_hunter",
-        "boss_slayer",
-        "speed_demon",
-        "perfectionist"
-    ]
-    charlie = Player("charlie", charlie_stats)
+    all_distinct = set()
+    for name in player_names:
+        all_distinct = all_distinct.union(player_sets[name])
+    print(f'All distinct achievements: {all_distinct}\n')
 
-    players = [alice, bob, charlie]
+    common = player_sets[player_names[0]]
+    for name in player_names[1:]:
+        common = common.intersection(player_sets[name])
+    print(f'Common achievements: {common}\n')
 
-    for p in players:
-        print(f"Player {p.name} achievements: {p.achievements}")
+    for name in player_names:
+        others = set()
 
-    print("\n=== Achievement Analytics ===")
+        for other_name in player_names:
+            if other_name != name:
+                others = others.union(player_sets[other_name])
 
-    all_achievements = (
-        alice.achievements
-        .union(bob.achievements)
-        .union(charlie.achievements)
-    )
+        only_this_player = player_sets[name].difference(others)
+        print(f'Only {name} has: {only_this_player}\n')
 
-    print(f"All unique achievements: {all_achievements}")
-    print()
-    print(f"Total unique achievements: {len(all_achievements)}")
-
-    common_all = (
-        alice.achievements
-        .intersection(bob.achievements)
-        .intersection(charlie.achievements)
-    )
-
-    print(f"Common to all players: {common_all}")
-
-    shared_pairs = (
-        alice.achievements.intersection(bob.achievements)
-        .union(alice.achievements.intersection(charlie.achievements))
-        .union(bob.achievements.intersection(charlie.achievements))
-    )
-
-    rare = all_achievements.difference(shared_pairs)
-    print(f"Rare achievements (1 player): {rare}")
-    print()
-    print(f"Alice vs Bob common: {alice.common_with(bob)}")
-    print(f"Alice unique: {alice.unique_vs(bob)}")
-    print(f"Bob unique: {bob.unique_vs(alice)}")
+    for name in player_names:
+        missing = all_distinct.difference(player_sets[name])
+        print(f'{name} is missing: {missing}')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

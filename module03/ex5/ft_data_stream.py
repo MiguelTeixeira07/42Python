@@ -1,99 +1,67 @@
-from typing import Generator as gen
+import random
+from typing import Generator
 
 
-def game_event_stream(total_events: int) -> gen[str, None, None]:
-    players = ["alice", "bob", "charlie"]
-    actions = ["killed monster", "found treasure", "leveled up"]
+def gen_event() -> Generator[tuple[str, str], None, None]:
+    players = (
+        'alice',
+        'bob',
+        'charlie',
+        'dylan'
+    )
 
-    for i in range(1, total_events + 1):
-        player = players[i % 3]
-        level = (i % 15) + 1
-        action = actions[i % 3]
-        yield f"Event {i}: Player {player} (level {level}) {action}"
+    actions = (
+        'run',
+        'eat',
+        'sleep',
+        'grab',
+        'move',
+        'climb',
+        'swim',
+        'use',
+        'release'
+    )
+
+    while True:
+        yield (
+            players[random.randint(0, len(players) - 1)],
+            actions[random.randint(0, len(actions) - 1)]
+        )
 
 
-def fibonacci_stream(n: int) -> gen[int, None, None]:
-    a = 0
-    b = 1
-    count = 0
+def build_event_list(event_gen: Generator[tuple[str, str], None,
+                                          None]) -> list[tuple[str, str]]:
+    events = []
 
-    while count < n:
-        yield a
-        temp = a + b
-        a = b
-        b = temp
-        count += 1
+    for _ in range(10):
+        events.append(next(event_gen))
+
+    return events
 
 
-def prime_stream(n: int) -> gen[int, None, None]:
-    num = 2
-    count = 0
-
-    while count < n:
-        is_prime = True
-        for i in range(2, num):
-            if num % i == 0:
-                is_prime = False
-                break
-        if is_prime:
-            yield num
-            count += 1
-        num += 1
+def consume_event(events: list[tuple[str, str]]) -> Generator[tuple[str, str],
+                                                              None, None]:
+    while len(events) > 0:
+        index = random.randint(0, len(events) - 1)
+        event = events.pop(index)
+        yield event
 
 
 def main():
-    print("=== Game Data Stream Processor ===\n")
+    print("=== Game Data Stream Processor ===")
 
-    total_events = 3
-    print(f"Processing {total_events} game events...\n")
+    event_generator = gen_event()
 
-    event_stream = game_event_stream(total_events)
+    for i in range(1000):
+        event = next(event_generator)
+        print(f"Event {i}: Player {event[0]} did action {event[1]}")
 
-    processed = 0
-    high_level = 0
-    treasure_events = 0
-    level_up_events = 0
+    events = build_event_list(event_generator)
+    print(f"Built list of 10 events: {events}\n")
 
-    for event in event_stream:
-        processed += 1
-
-        if processed <= 3:
-            print(event)
-
-        if "level" in event:
-            level_str = event.split("level ")[1]
-            level = int(level_str.split(")")[0])
-            if level >= 10:
-                high_level += 1
-
-        if "found treasure" in event:
-            treasure_events += 1
-
-        if "leveled up" in event:
-            level_up_events += 1
-
-    print("\n=== Stream Analytics ===")
-    print(f"Total events processed: {processed}")
-    print(f"High-level players (10+): {high_level}")
-    print(f"Treasure events: {treasure_events}")
-    print(f"Level-up events: {level_up_events}")
-    print()
-    print("Memory usage: Constant (streaming)")
-    print("Processing time: Not stored (stream-based)")
-
-    print("\n=== Generator Demonstration ===")
-
-    fib = fibonacci_stream(10)
-    fib_values = []
-    for value in fib:
-        fib_values.append(str(value))
-    print("Fibonacci sequence (first 10): " + ", ".join(fib_values))
-
-    primes = prime_stream(5)
-    prime_values = []
-    for value in primes:
-        prime_values.append(str(value))
-    print("Prime numbers (first 5): " + ", ".join(prime_values))
+    for event in consume_event(events):
+        print(f"Got event from list: {event}")
+        print(f"Remains in list: {events}")
 
 
 if __name__ == "__main__":

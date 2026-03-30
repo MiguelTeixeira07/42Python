@@ -8,7 +8,7 @@ def test_inputs(argv: list) -> list:
         try:
             temp = int(arg)
         except ValueError:
-            print(f"Can't type that mate: {arg}")
+            print("Can't type", f'"{arg}" mate')
         else:
             int_args.append(temp)
 
@@ -16,13 +16,15 @@ def test_inputs(argv: list) -> list:
 
 
 def main() -> None:
-    if len(sys.argv) == 1:
-        print('No scores provided. :(')
-        return
-
     print('=== Player Score Analytics ===')
 
     scores = test_inputs(sys.argv[1:])
+
+    if len(scores) <= 0:
+        print('No scores provided.', end=' ')
+        print('Usage: python3 ft_score_analytics.py <score1> <score2> ...')
+        return
+
     total_sum = sum(scores)
     ammount = len(scores)
     biggest = max(scores)
