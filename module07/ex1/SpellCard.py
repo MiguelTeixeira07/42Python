@@ -9,22 +9,24 @@ class SpellCard(Card):
         self.effect_type = effect_type
 
     def play(self, game_state: dict) -> dict:
-        """
-        Should apply the spell effect and consume the card.
+        playable = self.is_playable(game_state["player_mana"])
 
-        Returns
-        -------
-        dict describing spell resolution.
-        """
-        pass
+        if playable:
+            game_state["player_mana"] -= self.cost
+
+            result = {
+                "card_played": self.name,
+                "mana_used": self.cost,
+                "effect": f"{self.effect_type} spell activated"
+            }
+
+            print(f"Play result: {result}")
+
+        return game_state
 
     def resolve_effect(self, targets: List) -> Dict:
-        """
-        Should apply the effect_type to the targets.
-
-        Example:
-            damage → deal damage
-            heal → restore health
-            buff → increase stats
-        """
-        pass
+        return {
+            "spell": self.name,
+            "targets": targets,
+            "effect_type": self.effect_type
+        }

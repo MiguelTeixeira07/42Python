@@ -14,14 +14,14 @@ class Card(ABC):
         pass
 
     def get_card_info(self) -> Dict:
-        struct: dict = {
+        card_info: dict = {
             'name': self.name,
             'cost': self.cost,
             'rarity': self.rarity,
             'type': self.__class__.__name__
         }
 
-        return struct
+        return card_info
 
     def is_playable(self, available_mana: int) -> bool:
         playable = True if available_mana >= self.cost else False
