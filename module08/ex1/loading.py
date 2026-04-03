@@ -1,6 +1,7 @@
 import sys
 import importlib
-from importlib.util import find_spec
+from importlib.util import find_spec  # noqa: F401
+
 
 def check_dependency(module_name: str) -> tuple[bool, str | None]:
     try:
@@ -35,7 +36,8 @@ def show_dependencies() -> bool:
         if installed:
             print(f'[OK] {module_name} ({version}) - {description}')
         else:
-            print(f'[MISSING] {module_name} - Required dependency not installed')
+            mn = module_name
+            print(f'[MISSING] {mn} - Required dependency not installed')
             missing_required = True
 
     for module_name, description in optional_modules.items():

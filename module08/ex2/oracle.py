@@ -31,7 +31,8 @@ def validate_configuration(config: dict[str, str | None]) -> bool:
         print('WARNING: Missing required configuration values:')
         for variable in missing:
             print(f'- {variable}')
-        print('\nCreate a .env file from .env.example or export variables manually.')
+        print('\nCreate a .env file from .env.example', end=' ')
+        print('or export variables manually.')
         return False
 
     return True
