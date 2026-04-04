@@ -1,4 +1,4 @@
-from ex0.CreatureCard import CreatureCard
+from .CreatureCard import CreatureCard
 
 
 def main():
@@ -10,7 +10,7 @@ def main():
     goblin_warrior = CreatureCard('Goblin Warrior', 3, 'Uncommon', 2, 1)
 
     game_state = {
-        "player_mana": 8,
+        "player_mana": 6,
         "battlefield": [goblin_warrior],
         "graveyard": [],
         "player_health": 20,
@@ -26,7 +26,6 @@ def main():
 
     game_state = dragon.attack_target(goblin_warrior, game_state)
 
-    playable = dragon.is_playable(3)
     print('\nTesting insufficient mana ', end='')
     print(f'({game_state["player_mana"]} available):')
     dragon.play(game_state)

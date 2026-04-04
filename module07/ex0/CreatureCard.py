@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from ex0.Card import Card
+from .Card import Card
 
 
 class CreatureCard(Card):
@@ -18,7 +18,7 @@ class CreatureCard(Card):
         playable = self.is_playable(game_state['player_mana'])
 
         print(f'\nPlaying {self.name} with ', end='')
-        print(f'mana available: {game_state['player_mana']}')
+        print(f'{game_state['player_mana']} mana available:')
         print(f'Playable: {playable}')
 
         if playable:
@@ -58,3 +58,12 @@ class CreatureCard(Card):
         print(f'Attack result: {attack_result}')
 
         return game_state
+
+    def get_card_info(self) -> Dict:
+        info = super().get_card_info()
+
+        info['type'] = 'Creature'
+        info['attack'] = self.attack
+        info['health'] = self.health
+
+        return info
