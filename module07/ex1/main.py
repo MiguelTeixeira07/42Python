@@ -14,15 +14,21 @@ def main():
     bolt = SpellCard("Lightning Bolt", 3, "Common", "damage")
     crystal = ArtifactCard("Mana Crystal", 2, "Rare", 5, "+1 mana per turn")
 
-    deck.add_card(dragon)
     deck.add_card(bolt)
     deck.add_card(crystal)
+    deck.add_card(dragon)
 
     print("Deck stats:", deck.get_deck_stats())
 
     deck.shuffle()
 
-    game_state = {"player_mana": 10}
+    game_state = {
+        "player_mana": 10,
+        "battlefield": [],
+        "graveyard": [],
+        "player_health": 20,
+        "enemy_health": 20
+    }
 
     for _ in range(3):
 
