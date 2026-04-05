@@ -33,7 +33,7 @@ class CreatureCard(Card):
 
         return game_state
 
-    def attack_target(self, target: CreatureCard, game_state: dict) -> Dict:
+    def attack_target(self, target: 'CreatureCard', game_state: dict) -> Dict:
         print('\nFire Dragon attacks Goblin Warrior:')
 
         attack_result: dict[str, Any] = {
