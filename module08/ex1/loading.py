@@ -22,10 +22,7 @@ def show_dependencies() -> bool:
     required_modules = {
         'pandas': 'Data manipulation ready',
         'numpy': 'Numerical computations ready',
-        'matplotlib': 'Visualization ready'
-    }
-
-    optional_modules = {
+        'matplotlib': 'Visualization ready',
         'requests': 'Network access ready (optional)'
     }
 
@@ -39,13 +36,6 @@ def show_dependencies() -> bool:
             mn = module_name
             print(f'[MISSING] {mn} - Required dependency not installed')
             missing_required = True
-
-    for module_name, description in optional_modules.items():
-        installed, version = check_dependency(module_name)
-        if installed:
-            print(f'[OK] {module_name} ({version}) - {description}')
-        else:
-            print(f'[OPTIONAL] {module_name} - Not installed')
 
     if missing_required:
         print('\nMissing required dependencies.')

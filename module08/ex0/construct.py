@@ -10,7 +10,7 @@ def print_instructions() -> None:
     print('To enter the construct, run:')
     print('python3 -m venv <envritonment_name>')
     print('source <environment_name>/bin/activate # On Unix')
-    print('matrix_env\nScripts\nactivate\t# On Windows\n')
+    print('matrix_env\\Scripts\\activate  # On Windows\n')
 
     print('Then run this program again.')
 

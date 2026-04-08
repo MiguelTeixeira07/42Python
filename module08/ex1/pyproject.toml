@@ -1,14 +1,16 @@
 [tool.poetry]
-name = "matrix-loading"
+name = "ex1-loading"
 version = "0.1.0"
-description = "Exercise 01 - Loading Programs"
-authors = ["Your Name"]
+description = "A quick exercise to learn how some project management libraries work"
+authors = ["migteixe"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
 pandas = "*"
 numpy = "*"
 matplotlib = "*"
+requests = "*"
 
 [build-system]
 requires = ["poetry-core"]

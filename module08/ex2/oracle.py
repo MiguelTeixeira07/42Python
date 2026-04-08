@@ -53,7 +53,7 @@ def show_configuration(config: dict[str, str | None]) -> None:
     else:
         print('API Access: Missing API key')
 
-    print(f'Log Level: {config["LOG_LEVEL"]}')
+    print(f'Log Level: {config['LOG_LEVEL']}')
 
     if config['ZION_ENDPOINT']:
         print('Zion Network: Online')
