@@ -23,21 +23,28 @@ class AlienContact(BaseModel):
     is_verified: bool = Field(default=False)
 
     @model_validator(mode='after')
-    def validator(self) -> AlienContact:
+    def validator(self) -> 'AlienContact':
+        errs = []
+
         if self.contact_id[:2] != 'AC':
-            print('Contact ID must start with "AC"')
+            errs.append('Contact ID must start with "AC"')
 
         if self.contact_type == ContactType.PHYSICAL and not self.is_verified:
-            print('Physical contact must be verified')
+            errs.append('Physical contact must be verified')
 
         if (
             self.contact_type == ContactType.TELEPATHIC
             and self.witness_count < 3
         ):
-            print('Telepathic contact requires at least 3 witnesses')
+            errs.append('Telepathic contact requires at least 3 witnesses')
 
         if self.signal_strength > 7.0 and self.message_recieved is None:
-            print('Strong signals (> 7.0) should include received messages')
+            errs.append(
+                'Strong signals (> 7.0) should include received messages'
+            )
+
+        if errs:
+            raise ValueError('\n'.join(errs))
 
         return self
 
@@ -78,8 +85,13 @@ def main() -> None:
             witness_count=2,
             message_recieved='Greetings from Zeta Reticuli'
         )
-    except ValidationError:
-        print('Invalid input')
+    except ValidationError as e:
+        for err in e.errors():
+            main_msg = err['msg'].split("('", 1)[0]
+            if 'Value error' in main_msg:
+                print(main_msg[13:])
+            else:
+                print(main_msg)
 
 
 if __name__ == '__main__':

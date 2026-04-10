@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, ValidationError
 from enum import Enum
 from datetime import datetime
 
@@ -31,20 +31,30 @@ class SpaceMission(BaseModel):
     budget_millions: float = Field(ge=1, le=10000)
 
     @model_validator(mode='after')
-    def validator(self) -> SpaceMission:
-        if self.mission_id[0] != 'M':
-            print('Mission ID must start with "M"')
+    def validator(self) -> 'SpaceMission':
+        errs = []
 
-        if not (Rank.COMMANDER in self.crew or Rank.CAPTAIN in self.crew):
-            print('Mission must have at least one Commander or Captain')
+        valid = False
+        for member in self.crew:
+            if member.rank == Rank.COMMANDER or member.rank == Rank.CAPTAIN:
+                valid = True
+                break
+        if not valid:
+            errs.append('Mission must have at least one Commander or Captain')
+
+        if self.mission_id[0] != 'M':
+            errs.append('Mission ID must start with "M"')
 
         expd = [member for member in self.crew if member.years_experience > 4]
         if len(expd) < (len(self.crew) / 2) and self.duration_days > 365:
-            print('Long missions (> 365 days) need ', end='')
-            print('50%% experienced crew (5+ years)')
+            errs.append('Long missions (> 365 days) need '
+                        '50%% experienced crew (5+ years)')
 
         if not all(member.is_active for member in self.crew):
-            print('All crew members must be active')
+            errs.append('All crew members must be active')
+
+        if errs:
+            raise ValueError('\n'.join(errs))
 
         return self
 
@@ -104,32 +114,42 @@ def main() -> None:
     print('\n=========================================')
     print('Expected validation error:')
 
-    _ = SpaceMission(
-        mission_id='M2024_MARS',
-        mission_name='Mars Colony Establishment',
-        destination='Mars',
-        launch_date=datetime.now(),
-        duration_days=900,
-        budget_millions=2500.0,
-        crew=[
-            SpaceMission.CrewMember(
-                member_id='John',
-                name='John Smith',
-                rank=Rank.LIEUTENANT,
-                age=67,
-                specialization='Navigation',
-                years_experience=34,
-            ),
-            SpaceMission.CrewMember(
-                member_id='Alice',
-                name='Alice Johnson',
-                rank=Rank.OFFICER,
-                age=67,
-                specialization='Engineering',
-                years_experience=34,
-            )
-        ],
-    )
+    try:
+        _ = SpaceMission(
+            mission_id='S2024_MARS',
+            mission_name='Mars Colony Establishment',
+            destination='Mars',
+            launch_date=datetime.now(),
+            duration_days=900,
+            budget_millions=2500.0,
+            crew=[
+                SpaceMission.CrewMember(
+                    member_id='John',
+                    name='John Smith',
+                    rank=Rank.LIEUTENANT,
+                    age=67,
+                    specialization='Navigation',
+                    years_experience=34,
+                ),
+                SpaceMission.CrewMember(
+                    member_id='Alice',
+                    name='Alice Johnson',
+                    rank=Rank.CADET,
+                    age=67,
+                    specialization='Engineering',
+                    years_experience=20,
+                )
+            ],
+        )
+    except ValidationError as e:
+        for err in e.errors():
+            main_msg = err['msg'].split('(', 1)[0]
+            if 'Value error' in main_msg:
+                print(main_msg[13:])
+            else:
+                print(main_msg)
+    except ValueError as e:
+        print(e)
 
 
 if __name__ == '__main__':
